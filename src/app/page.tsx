@@ -89,10 +89,10 @@ async function deleteSubmission(id: string) {
 }
 // ── Demo data ──
 const DEMO_PROFILES = [
-  { name:"The Growth Letter", category:"Marketing", subscribers:"45,200", openRate:"52.1%", ctr:"8.3%", growth:"+18.3%", spark:[28000,30200,33100,35800,37200,39400,41000,42800,44100,45200], verified:true },
-  { name:"Indie Hackers Weekly", category:"Startups", subscribers:"32,100", openRate:"47.8%", ctr:"6.1%", growth:"+14.7%", spark:[21000,22800,24100,25500,27200,28400,29800,30500,31200,32100], verified:true },
-  { name:"AI Breakfast", category:"AI / Tech", subscribers:"28,400", openRate:"44.2%", ctr:"5.9%", growth:"+22.1%", spark:[15000,17200,19100,20800,22400,23800,25100,26500,27600,28400], verified:true },
-  { name:"Be Reddy", category:"Reddit Marketing", subscribers:"22", openRate:"44%", ctr:"3.64%", growth:"+22", spark:[0,0,0,2,3,5,4,8,12,22], verified:true },
+  { name:"The Growth Letter", category:"Marketing", subscribers:"45,200", openRate:"52.1%", ctr:"8.3%", growth:"+18.3%", spark:[28000,30200,33100,35800,37200,39400,41000,42800,44100,45200], verified:false, pending:true },
+  { name:"Indie Hackers Weekly", category:"Startups", subscribers:"32,100", openRate:"47.8%", ctr:"6.1%", growth:"+14.7%", spark:[21000,22800,24100,25500,27200,28400,29800,30500,31200,32100], verified:false, pending:true },
+  { name:"AI Breakfast", category:"AI / Tech", subscribers:"28,400", openRate:"44.2%", ctr:"5.9%", growth:"+22.1%", spark:[15000,17200,19100,20800,22400,23800,25100,26500,27600,28400], verified:false, pending:true },
+  { name:"Be Reddy", category:"Reddit Marketing", subscribers:"22", openRate:"44%", ctr:"3.64%", growth:"+22", spark:[0,0,0,2,3,5,4,8,12,22], verified:false, pending:true },
 ];
 // ============================================
 // PAGES
@@ -191,26 +191,31 @@ function Landing({ goTo }: { goTo: (p: string) => void }) {
         <div style={{ background:CARD, borderRadius:16, border:`1px solid ${BORDER}`, padding:"4px 20px 12px", textAlign:"left" }}>
           {DEMO_PROFILES.map((p,i) => (
             <div key={i} style={{ display:"flex", alignItems:"center", padding:"14px 0", borderBottom: i < DEMO_PROFILES.length-1 ? `1px solid ${BORDER}` : "none", gap:14 }}>
-              <span style={{ fontSize:13, fontWeight:800, color: i < 3 ? G : MUTED, fontFamily:MONO, width:26, textAlign:"center" }}>{i+1}</span>
+              <span style={{ fontSize:13, fontWeight:800, color: MUTED, fontFamily:MONO, width:26, textAlign:"center" }}>{i+1}</span>
               <div style={{ flex:1 }}>
                 <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-                  <span style={{ fontSize:14, fontWeight:700, color:TXT }}>{p.name}</span><Badge s={13}/>
+                  <span style={{ fontSize:14, fontWeight:700, color:TXT }}>{p.name}</span>
+                  {p.pending ? (
+                    <span style={{ fontSize:10, fontWeight:700, color:"#E68A00", background:"#E68A0012", borderRadius:4, padding:"2px 7px" }}>PENDING</span>
+                  ) : (
+                    <Badge s={13}/>
+                  )}
                 </div>
                 <span style={{ fontSize:11, color:MUTED }}>{p.category}</span>
               </div>
               <div style={{ textAlign:"right", minWidth:64 }}>
-                <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO }}>{p.subscribers}</span>
+                <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO, filter: p.pending ? "blur(5px)" : "none", userSelect: p.pending ? "none" as const : "auto" as const }}>{p.subscribers}</span>
                 <span style={{ fontSize:10, color:MUTED, display:"block" }}>subs</span>
               </div>
               <div style={{ textAlign:"right", minWidth:48 }}>
-                <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO }}>{p.openRate}</span>
+                <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO, filter: p.pending ? "blur(5px)" : "none", userSelect: p.pending ? "none" as const : "auto" as const }}>{p.openRate}</span>
                 <span style={{ fontSize:10, color:MUTED, display:"block" }}>open</span>
               </div>
               <div style={{ textAlign:"right", minWidth:48 }}>
-                <span style={{ fontSize:13, fontWeight:600, color:G, fontFamily:MONO }}>{p.growth}</span>
+                <span style={{ fontSize:13, fontWeight:600, color:G, fontFamily:MONO, filter: p.pending ? "blur(5px)" : "none", userSelect: p.pending ? "none" as const : "auto" as const }}>{p.growth}</span>
                 <span style={{ fontSize:10, color:MUTED, display:"block" }}>30d</span>
               </div>
-              <div style={{ width:72 }}><Spark data={p.spark}/></div>
+              <div style={{ width:72, filter: p.pending ? "blur(5px)" : "none" }}><Spark data={p.spark}/></div>
             </div>
           ))}
         </div>
@@ -319,7 +324,7 @@ function LeaderboardPage({ goTo }: { goTo: (p: string) => void }) {
   const [subs, setSubs] = useState<any[]>([]);
   useEffect(() => { (async () => { const s = await loadSubmissions(); setSubs(s.filter((x: any) => x.status === "verified")); })(); }, []);
   const all = [...DEMO_PROFILES, ...subs.map((s: any) => ({
-    name: s.newsletter, category: s.category, subscribers: "—", openRate: "—", ctr: "—", growth: "—", spark: [0,1,2,3,4,5,6,7,8,9], verified: true,
+    name: s.newsletter, category: s.category, subscribers: "—", openRate: "—", ctr: "—", growth: "—", spark: [0,1,2,3,4,5,6,7,8,9], verified: true, pending: false,
   }))];
   return (
     <div style={{ maxWidth:880, margin:"0 auto", padding:"40px 24px" }}>
@@ -337,26 +342,31 @@ function LeaderboardPage({ goTo }: { goTo: (p: string) => void }) {
         </div>
         {all.map((p: any,i: number) => (
           <div key={i} style={{ display:"flex", alignItems:"center", padding:"14px 0", borderBottom: i < all.length-1 ? `1px solid ${BORDER}` : "none", gap:14 }}>
-            <span style={{ fontSize:13, fontWeight:800, color: i < 3 ? G : MUTED, fontFamily:MONO, width:26, textAlign:"center" }}>{i+1}</span>
+            <span style={{ fontSize:13, fontWeight:800, color: MUTED, fontFamily:MONO, width:26, textAlign:"center" }}>{i+1}</span>
             <div style={{ flex:1, minWidth:0 }}>
               <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-                <span style={{ fontSize:14, fontWeight:700, color:TXT }}>{p.name}</span><Badge s={13}/>
+                <span style={{ fontSize:14, fontWeight:700, color:TXT }}>{p.name}</span>
+                {p.pending ? (
+                  <span style={{ fontSize:10, fontWeight:700, color:"#E68A00", background:"#E68A0012", borderRadius:4, padding:"2px 7px" }}>PENDING</span>
+                ) : (
+                  <Badge s={13}/>
+                )}
               </div>
               <span style={{ fontSize:11, color:MUTED }}>{p.category}</span>
             </div>
             <div style={{ textAlign:"right", minWidth:64 }}>
-              <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO }}>{p.subscribers}</span>
+              <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO, filter: p.pending ? "blur(5px)" : "none", userSelect: p.pending ? "none" as const : "auto" as const }}>{p.subscribers}</span>
               <span style={{ fontSize:10, color:MUTED, display:"block" }}>subs</span>
             </div>
             <div style={{ textAlign:"right", minWidth:48 }}>
-              <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO }}>{p.openRate}</span>
+              <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO, filter: p.pending ? "blur(5px)" : "none", userSelect: p.pending ? "none" as const : "auto" as const }}>{p.openRate}</span>
               <span style={{ fontSize:10, color:MUTED, display:"block" }}>open</span>
             </div>
             <div style={{ textAlign:"right", minWidth:48 }}>
-              <span style={{ fontSize:13, fontWeight:600, color:G, fontFamily:MONO }}>{p.growth}</span>
+              <span style={{ fontSize:13, fontWeight:600, color:G, fontFamily:MONO, filter: p.pending ? "blur(5px)" : "none", userSelect: p.pending ? "none" as const : "auto" as const }}>{p.growth}</span>
               <span style={{ fontSize:10, color:MUTED, display:"block" }}>30d</span>
             </div>
-            <div style={{ width:72 }}><Spark data={p.spark}/></div>
+            <div style={{ width:72, filter: p.pending ? "blur(5px)" : "none" }}><Spark data={p.spark}/></div>
           </div>
         ))}
       </div>
