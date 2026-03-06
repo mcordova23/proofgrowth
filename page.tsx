@@ -249,7 +249,7 @@ function Landing({ goTo }: { goTo: (p: string) => void }) {
             </a>
           ))}
           {/* Advertise CTA */}
-          <a href="mailto:ads@proofgrowth.com" style={{
+          <a href="/advertise" style={{
             flex:"1 1 180px", minWidth:160, maxWidth:220,
             background:BG, borderRadius:14, padding:"20px 16px",
             textDecoration:"none", border:`2px dashed ${BORDER}`,
@@ -366,7 +366,7 @@ function SubmitForm({ goTo }: { goTo: (p: string) => void }) {
 
 // ── Sidebar Ad Card ──
 const SidebarAd = ({ name, description, icon, isAdvertise }: { name: string, description: string, icon: string, isAdvertise?: boolean }) => (
-  <a href={isAdvertise ? "mailto:ads@proofgrowth.com" : "#"} style={{
+  <a href={isAdvertise ? "/advertise" : "#"} style={{
     display:"block", background:CARD, borderRadius:14, padding:"20px 16px",
     textDecoration:"none", border: isAdvertise ? `2px dashed ${BORDER}` : `1px solid ${BORDER}`,
     marginBottom:12, textAlign:"center" as const, transition:"transform 0.2s",
