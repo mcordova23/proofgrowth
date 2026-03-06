@@ -89,10 +89,21 @@ async function deleteSubmission(id: string) {
 }
 // ── Demo data ──
 const DEMO_PROFILES = [
-  { name:"The Growth Letter", category:"Marketing", subscribers:"45,200", openRate:"52.1%", ctr:"8.3%", growth:"+18.3%", spark:[28000,30200,33100,35800,37200,39400,41000,42800,44100,45200], verified:true },
-  { name:"Indie Hackers Weekly", category:"Startups", subscribers:"32,100", openRate:"47.8%", ctr:"6.1%", growth:"+14.7%", spark:[21000,22800,24100,25500,27200,28400,29800,30500,31200,32100], verified:true },
-  { name:"AI Breakfast", category:"AI / Tech", subscribers:"28,400", openRate:"44.2%", ctr:"5.9%", growth:"+22.1%", spark:[15000,17200,19100,20800,22400,23800,25100,26500,27600,28400], verified:true },
   { name:"Be Reddy", category:"Reddit Marketing", subscribers:"22", openRate:"44%", ctr:"3.64%", growth:"+22", spark:[0,0,0,2,3,5,4,8,12,22], verified:true },
+];
+
+// ── Sponsor/Ad Data ──
+const SPONSORS = [
+  { name: "Postopus", description: "Post everywhere, all at once. Become a Founding Tentacle.", url: "#", icon: "P" },
+  { name: "xCloud", description: "The #1 Cloud Hosting From OpenClaw to Lovable, Anything", url: "#", icon: "X" },
+  { name: "CodeFast", description: "Learn to code in days, not years", url: "#", icon: "C" },
+];
+
+const TOOLS_SPONSORED = [
+  { name: "SuperX", description: "Grow faster on X with smart analytics, hidden insights and...", color: "#FFF3E0", icon: "S" },
+  { name: "Outrank", description: "Grow organic traffic on autopilot. Get recommended by ChatGPT & Rank...", color: "#FFF8E1", icon: "O" },
+  { name: "Feather", description: "Use Notion to publish an SEO-friendly blog, collect emails and...", color: "#F3E5F5", icon: "F" },
+  { name: "PostSyncer", description: "PostSyncer helps you manage all your social accounts. Schedule...", color: "#E3F2FD", icon: "P" },
 ];
 // ============================================
 // PAGES
@@ -217,6 +228,44 @@ function Landing({ goTo }: { goTo: (p: string) => void }) {
         <Btn small onClick={() => goTo("leaderboard")} style={{ marginTop:20 }}>View Full Leaderboard →</Btn>
       </div>
 
+      {/* Sponsored Tools Section */}
+      <div style={{ padding:"80px 0 0" }}>
+        <p style={{ fontSize:11, fontWeight:700, color:MUTED, textTransform:"uppercase" as const, letterSpacing:"0.1em", marginBottom:16 }}>
+          NEWSLETTER TOOLS FOR GROWTH (SPONSORED)
+        </p>
+        <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
+          {TOOLS_SPONSORED.map((tool, i) => (
+            <a key={i} href={tool.url || "#"} target="_blank" rel="noopener noreferrer" style={{
+              flex:"1 1 180px", minWidth:160, maxWidth:220,
+              background:tool.color, borderRadius:14, padding:"20px 16px",
+              textDecoration:"none", border:`1px solid ${BORDER}`,
+              transition:"transform 0.2s, box-shadow 0.2s",
+            }}>
+              <div style={{ width:32, height:32, borderRadius:8, background:BG, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:12, fontSize:14, fontWeight:800, color:TXT }}>
+                {tool.icon}
+              </div>
+              <span style={{ fontSize:14, fontWeight:700, color:TXT, display:"block", marginBottom:4 }}>{tool.name}</span>
+              <span style={{ fontSize:12, color:MUTED, lineHeight:1.4, display:"block" }}>{tool.description}</span>
+            </a>
+          ))}
+          {/* Advertise CTA */}
+          <a href="mailto:ads@proofgrowth.com" style={{
+            flex:"1 1 180px", minWidth:160, maxWidth:220,
+            background:BG, borderRadius:14, padding:"20px 16px",
+            textDecoration:"none", border:`2px dashed ${BORDER}`,
+            display:"flex", flexDirection:"column" as const, alignItems:"center", justifyContent:"center",
+            textAlign:"center" as const,
+          }}>
+            <div style={{ width:32, height:32, borderRadius:8, background:CARD, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:12, fontSize:18, color:MUTED }}>
+              +
+            </div>
+            <span style={{ fontSize:14, fontWeight:700, color:TXT, display:"block", marginBottom:2 }}>Advertise</span>
+            <span style={{ fontSize:12, color:G, fontWeight:600 }}>$49/month</span>
+            <span style={{ fontSize:11, color:MUTED, marginTop:4 }}>3/4 spots left</span>
+          </a>
+        </div>
+      </div>
+
       {/* CTA */}
       <div style={{ padding:"80px 0 60px" }}>
         <div style={{
@@ -315,6 +364,27 @@ function SubmitForm({ goTo }: { goTo: (p: string) => void }) {
   );
 }
 
+// ── Sidebar Ad Card ──
+const SidebarAd = ({ name, description, icon, isAdvertise }: { name: string, description: string, icon: string, isAdvertise?: boolean }) => (
+  <a href={isAdvertise ? "mailto:ads@proofgrowth.com" : "#"} style={{
+    display:"block", background:CARD, borderRadius:14, padding:"20px 16px",
+    textDecoration:"none", border: isAdvertise ? `2px dashed ${BORDER}` : `1px solid ${BORDER}`,
+    marginBottom:12, textAlign:"center" as const, transition:"transform 0.2s",
+  }}>
+    <div style={{
+      width:40, height:40, borderRadius:10, background: isAdvertise ? BG : `${G}10`,
+      display:"flex", alignItems:"center", justifyContent:"center",
+      margin:"0 auto 10px", fontSize: isAdvertise ? 20 : 14, fontWeight:800,
+      color: isAdvertise ? MUTED : G,
+    }}>
+      {icon}
+    </div>
+    <span style={{ fontSize:13, fontWeight:700, color:TXT, display:"block", marginBottom:4 }}>{name}</span>
+    <span style={{ fontSize:11, color:MUTED, lineHeight:1.4, display:"block" }}>{description}</span>
+    {isAdvertise && <span style={{ fontSize:10, color:G, fontWeight:600, marginTop:6, display:"block" }}>5/6 spots left</span>}
+  </a>
+);
+
 function LeaderboardPage({ goTo }: { goTo: (p: string) => void }) {
   const [subs, setSubs] = useState<any[]>([]);
   useEffect(() => { (async () => { const s = await loadSubmissions(); setSubs(s.filter((x: any) => x.status === "verified")); })(); }, []);
@@ -322,7 +392,7 @@ function LeaderboardPage({ goTo }: { goTo: (p: string) => void }) {
     name: s.newsletter, category: s.category, subscribers: "—", openRate: "—", ctr: "—", growth: "—", spark: [0,1,2,3,4,5,6,7,8,9], verified: true,
   }))];
   return (
-    <div style={{ maxWidth:880, margin:"0 auto", padding:"40px 24px" }}>
+    <div style={{ maxWidth:1200, margin:"0 auto", padding:"40px 24px" }}>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:32 }}>
         <button onClick={() => goTo("landing")} style={{ background:"none", border:"none", color:MUTED, fontSize:14, fontWeight:600, cursor:"pointer", fontFamily:SANS, padding:0 }}>← Back</button>
         <Btn primary small onClick={() => goTo("submit")}>Get Verified</Btn>
@@ -331,38 +401,62 @@ function LeaderboardPage({ goTo }: { goTo: (p: string) => void }) {
         <h2 style={{ fontSize:36, fontWeight:900, letterSpacing:"-2px", margin:"0 0 10px", color:TXT }}>Leaderboard</h2>
         <p style={{ fontSize:16, color:MUTED }}>Every metric verified via API. Zero exceptions.</p>
       </div>
-      <div style={{ background:CARD, borderRadius:18, border:`1px solid ${BORDER}`, padding:"4px 22px 14px" }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"14px 0", borderBottom:`1px solid ${BORDER}` }}>
-          <span style={{ fontSize:11, fontWeight:700, color:MUTED, textTransform:"uppercase" as const, letterSpacing:"0.08em" }}>Sorted by subscribers</span>
+      
+      {/* Three column layout: Left Ads | Leaderboard | Right Ads */}
+      <div style={{ display:"flex", gap:24, alignItems:"flex-start" }}>
+        {/* Left Sidebar Ads */}
+        <div style={{ width:180, flexShrink:0, display:"none" }} className="sidebar-left">
+          <style>{`@media (min-width: 1024px) { .sidebar-left { display: block !important; } }`}</style>
+          {SPONSORS.slice(0, 3).map((sponsor, i) => (
+            <SidebarAd key={i} name={sponsor.name} description={sponsor.description} icon={sponsor.icon} />
+          ))}
         </div>
-        {all.map((p: any,i: number) => (
-          <div key={i} style={{ display:"flex", alignItems:"center", padding:"14px 0", borderBottom: i < all.length-1 ? `1px solid ${BORDER}` : "none", gap:14 }}>
-            <span style={{ fontSize:13, fontWeight:800, color: i < 3 ? G : MUTED, fontFamily:MONO, width:26, textAlign:"center" }}>{i+1}</span>
-            <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-                <span style={{ fontSize:14, fontWeight:700, color:TXT }}>{p.name}</span><Badge s={13}/>
+        
+        {/* Main Leaderboard */}
+        <div style={{ flex:1, minWidth:0 }}>
+          <div style={{ background:CARD, borderRadius:18, border:`1px solid ${BORDER}`, padding:"4px 22px 14px" }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"14px 0", borderBottom:`1px solid ${BORDER}` }}>
+              <span style={{ fontSize:11, fontWeight:700, color:MUTED, textTransform:"uppercase" as const, letterSpacing:"0.08em" }}>Sorted by subscribers</span>
+            </div>
+            {all.map((p: any,i: number) => (
+              <div key={i} style={{ display:"flex", alignItems:"center", padding:"14px 0", borderBottom: i < all.length-1 ? `1px solid ${BORDER}` : "none", gap:14 }}>
+                <span style={{ fontSize:13, fontWeight:800, color: i < 3 ? G : MUTED, fontFamily:MONO, width:26, textAlign:"center" }}>{i+1}</span>
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                    <span style={{ fontSize:14, fontWeight:700, color:TXT }}>{p.name}</span><Badge s={13}/>
+                  </div>
+                  <span style={{ fontSize:11, color:MUTED }}>{p.category}</span>
+                </div>
+                <div style={{ textAlign:"right", minWidth:64 }}>
+                  <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO }}>{p.subscribers}</span>
+                  <span style={{ fontSize:10, color:MUTED, display:"block" }}>subs</span>
+                </div>
+                <div style={{ textAlign:"right", minWidth:48 }}>
+                  <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO }}>{p.openRate}</span>
+                  <span style={{ fontSize:10, color:MUTED, display:"block" }}>open</span>
+                </div>
+                <div style={{ textAlign:"right", minWidth:48 }}>
+                  <span style={{ fontSize:13, fontWeight:600, color:G, fontFamily:MONO }}>{p.growth}</span>
+                  <span style={{ fontSize:10, color:MUTED, display:"block" }}>30d</span>
+                </div>
+                <div style={{ width:72 }}><Spark data={p.spark}/></div>
               </div>
-              <span style={{ fontSize:11, color:MUTED }}>{p.category}</span>
-            </div>
-            <div style={{ textAlign:"right", minWidth:64 }}>
-              <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO }}>{p.subscribers}</span>
-              <span style={{ fontSize:10, color:MUTED, display:"block" }}>subs</span>
-            </div>
-            <div style={{ textAlign:"right", minWidth:48 }}>
-              <span style={{ fontSize:13, fontWeight:700, color:TXT, fontFamily:MONO }}>{p.openRate}</span>
-              <span style={{ fontSize:10, color:MUTED, display:"block" }}>open</span>
-            </div>
-            <div style={{ textAlign:"right", minWidth:48 }}>
-              <span style={{ fontSize:13, fontWeight:600, color:G, fontFamily:MONO }}>{p.growth}</span>
-              <span style={{ fontSize:10, color:MUTED, display:"block" }}>30d</span>
-            </div>
-            <div style={{ width:72 }}><Spark data={p.spark}/></div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div style={{ textAlign:"center", marginTop:40 }}>
-        <p style={{ fontSize:15, color:MUTED, marginBottom:16 }}>Want to see your newsletter on this board?</p>
-        <Btn primary onClick={() => goTo("submit")}>Get Verified — Free</Btn>
+          <div style={{ textAlign:"center", marginTop:40 }}>
+            <p style={{ fontSize:15, color:MUTED, marginBottom:16 }}>Want to see your newsletter on this board?</p>
+            <Btn primary onClick={() => goTo("submit")}>Get Verified — Free</Btn>
+          </div>
+        </div>
+        
+        {/* Right Sidebar Ads */}
+        <div style={{ width:180, flexShrink:0, display:"none" }} className="sidebar-right">
+          <style>{`@media (min-width: 1024px) { .sidebar-right { display: block !important; } }`}</style>
+          {SPONSORS.slice(0, 2).map((sponsor, i) => (
+            <SidebarAd key={i} name={sponsor.name} description={sponsor.description} icon={sponsor.icon} />
+          ))}
+          <SidebarAd name="Advertise" description="Reach newsletter creators" icon="+" isAdvertise />
+        </div>
       </div>
     </div>
   );
