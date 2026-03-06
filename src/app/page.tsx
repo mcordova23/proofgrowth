@@ -89,9 +89,6 @@ async function deleteSubmission(id: string) {
 }
 // ── Demo data ──
 const DEMO_PROFILES = [
-  { name:"The Growth Letter", category:"Marketing", subscribers:"45,200", openRate:"52.1%", ctr:"8.3%", growth:"+18.3%", spark:[28000,30200,33100,35800,37200,39400,41000,42800,44100,45200], verified:true },
-  { name:"Indie Hackers Weekly", category:"Startups", subscribers:"32,100", openRate:"47.8%", ctr:"6.1%", growth:"+14.7%", spark:[21000,22800,24100,25500,27200,28400,29800,30500,31200,32100], verified:true },
-  { name:"AI Breakfast", category:"AI / Tech", subscribers:"28,400", openRate:"44.2%", ctr:"5.9%", growth:"+22.1%", spark:[15000,17200,19100,20800,22400,23800,25100,26500,27600,28400], verified:true },
   { name:"Be Reddy", category:"Reddit Marketing", subscribers:"22", openRate:"44%", ctr:"3.64%", growth:"+22", spark:[0,0,0,2,3,5,4,8,12,22], verified:true },
 ];
 // ============================================
