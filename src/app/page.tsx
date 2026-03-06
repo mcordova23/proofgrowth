@@ -352,22 +352,20 @@ function SubmitForm({ goTo }: { goTo: (p: string) => void }) {
 
 // ── Sidebar Ad Card ──
 const SidebarAd = ({ name, description, icon, isAdvertise }: { name: string, description: string, icon: string, isAdvertise?: boolean }) => (
-  <a href={isAdvertise ? "/advertise" : "#"} style={{
-    display:"block", background:CARD, borderRadius:14, padding:"20px 16px",
-    textDecoration:"none", border: isAdvertise ? `2px dashed ${BORDER}` : `1px solid ${BORDER}`,
+  <a href="/advertise" style={{
+    display:"block", background:BG, borderRadius:14, padding:"20px 16px",
+    textDecoration:"none", border:`2px dashed ${BORDER}`,
     marginBottom:12, textAlign:"center" as const, transition:"transform 0.2s",
   }}>
     <div style={{
-      width:40, height:40, borderRadius:10, background: isAdvertise ? BG : `${G}10`,
+      width:40, height:40, borderRadius:10, background:CARD,
       display:"flex", alignItems:"center", justifyContent:"center",
-      margin:"0 auto 10px", fontSize: isAdvertise ? 20 : 14, fontWeight:800,
-      color: isAdvertise ? MUTED : G,
+      margin:"0 auto 10px", fontSize:20, fontWeight:800, color:MUTED,
     }}>
-      {icon}
+      +
     </div>
-    <span style={{ fontSize:13, fontWeight:700, color:TXT, display:"block", marginBottom:4 }}>{name}</span>
-    <span style={{ fontSize:11, color:MUTED, lineHeight:1.4, display:"block" }}>{description}</span>
-    {isAdvertise && <span style={{ fontSize:10, color:G, fontWeight:600, marginTop:6, display:"block" }}>5/6 spots left</span>}
+    <span style={{ fontSize:13, fontWeight:700, color:TXT, display:"block", marginBottom:4 }}>Advertise</span>
+    <span style={{ fontSize:12, color:G, fontWeight:600, display:"block" }}>$49/month</span>
   </a>
 );
 
@@ -393,8 +391,8 @@ function LeaderboardPage({ goTo }: { goTo: (p: string) => void }) {
         {/* Left Sidebar Ads */}
         <div style={{ width:180, flexShrink:0, display:"none" }} className="sidebar-left">
           <style>{`@media (min-width: 1024px) { .sidebar-left { display: block !important; } }`}</style>
-          {SPONSORS.slice(0, 3).map((sponsor, i) => (
-            <SidebarAd key={i} name={sponsor.name} description={sponsor.description} icon={sponsor.icon} />
+          {[1,2,3].map((_, i) => (
+            <SidebarAd key={i} name="Advertise" description="$49/month" icon="+" isAdvertise />
           ))}
         </div>
         
@@ -438,10 +436,9 @@ function LeaderboardPage({ goTo }: { goTo: (p: string) => void }) {
         {/* Right Sidebar Ads */}
         <div style={{ width:180, flexShrink:0, display:"none" }} className="sidebar-right">
           <style>{`@media (min-width: 1024px) { .sidebar-right { display: block !important; } }`}</style>
-          {SPONSORS.slice(0, 2).map((sponsor, i) => (
-            <SidebarAd key={i} name={sponsor.name} description={sponsor.description} icon={sponsor.icon} />
+          {[1,2,3].map((_, i) => (
+            <SidebarAd key={i} name="Advertise" description="$49/month" icon="+" isAdvertise />
           ))}
-          <SidebarAd name="Advertise" description="Reach newsletter creators" icon="+" isAdvertise />
         </div>
       </div>
     </div>
