@@ -233,36 +233,22 @@ function Landing({ goTo }: { goTo: (p: string) => void }) {
         <p style={{ fontSize:11, fontWeight:700, color:MUTED, textTransform:"uppercase" as const, letterSpacing:"0.1em", marginBottom:16 }}>
           NEWSLETTER TOOLS FOR GROWTH (SPONSORED)
         </p>
-        <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
-          {TOOLS_SPONSORED.map((tool, i) => (
-            <a key={i} href={tool.url || "#"} target="_blank" rel="noopener noreferrer" style={{
-              flex:"1 1 180px", minWidth:160, maxWidth:220,
-              background:tool.color, borderRadius:14, padding:"20px 16px",
-              textDecoration:"none", border:`1px solid ${BORDER}`,
-              transition:"transform 0.2s, box-shadow 0.2s",
+        <div style={{ display:"flex", gap:12 }}>
+          {[1,2,3,4,5].map((_, i) => (
+            <a key={i} href="/advertise" style={{
+              flex:1, minWidth:0,
+              background:BG, borderRadius:14, padding:"20px 16px",
+              textDecoration:"none", border:`2px dashed ${BORDER}`,
+              display:"flex", flexDirection:"column" as const, alignItems:"center", justifyContent:"center",
+              textAlign:"center" as const,
             }}>
-              <div style={{ width:32, height:32, borderRadius:8, background:BG, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:12, fontSize:14, fontWeight:800, color:TXT }}>
-                {tool.icon}
+              <div style={{ width:32, height:32, borderRadius:8, background:CARD, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:12, fontSize:18, color:MUTED }}>
+                +
               </div>
-              <span style={{ fontSize:14, fontWeight:700, color:TXT, display:"block", marginBottom:4 }}>{tool.name}</span>
-              <span style={{ fontSize:12, color:MUTED, lineHeight:1.4, display:"block" }}>{tool.description}</span>
+              <span style={{ fontSize:14, fontWeight:700, color:TXT, display:"block", marginBottom:2 }}>Advertise</span>
+              <span style={{ fontSize:12, color:G, fontWeight:600 }}>$49/month</span>
             </a>
           ))}
-          {/* Advertise CTA */}
-          <a href="/advertise" style={{
-            flex:"1 1 180px", minWidth:160, maxWidth:220,
-            background:BG, borderRadius:14, padding:"20px 16px",
-            textDecoration:"none", border:`2px dashed ${BORDER}`,
-            display:"flex", flexDirection:"column" as const, alignItems:"center", justifyContent:"center",
-            textAlign:"center" as const,
-          }}>
-            <div style={{ width:32, height:32, borderRadius:8, background:CARD, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:12, fontSize:18, color:MUTED }}>
-              +
-            </div>
-            <span style={{ fontSize:14, fontWeight:700, color:TXT, display:"block", marginBottom:2 }}>Advertise</span>
-            <span style={{ fontSize:12, color:G, fontWeight:600 }}>$49/month</span>
-            <span style={{ fontSize:11, color:MUTED, marginTop:4 }}>3/4 spots left</span>
-          </a>
         </div>
       </div>
 
